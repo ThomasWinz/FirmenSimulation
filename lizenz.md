@@ -1,4 +1,4 @@
-[Creative Commons Namensnennung 4.0 International Lizenz](https://github.com/idleberg/Creative-Commons-Markdown/blob/master/4.0/by.markdown)
+[Creative Commons 4.0 International Lizenz  Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
 
 
 
