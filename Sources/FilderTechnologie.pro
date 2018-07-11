@@ -25,13 +25,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    Classes/ft_account.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    Classes/ft_account.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    Classes/ft_account.ui
 
 RESOURCES += \
     Ressources/ressources.qrc

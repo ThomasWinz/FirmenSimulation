@@ -3,6 +3,8 @@
 
 #include <QDebug>
 
+#include "Classes/ft_account.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -36,6 +38,24 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->spinBox_abonnents->setValue(m_Settings->value("spinBox_abonnents", 0).toInt());
 
     on_pushButton_reset_clicked();
+
+    FT_Account* account = new FT_Account(NULL);
+    account->show();
+
+    account->Slot_SetTitles("Bilanz",
+                            "Activa",
+                            "Passiva");
+    account->Slot_AddLeft("BGA",
+                          100.0);
+    account->Slot_AddLeft("Bank",
+                          200.0);
+
+    account->Slot_AddRight("EK",
+                           140.0);
+    account->Slot_AddRight("VB",
+                           160.0);
+
+
 }
 
 MainWindow::~MainWindow()
