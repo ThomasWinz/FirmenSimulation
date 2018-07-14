@@ -16,7 +16,12 @@ FT_Account::FT_Account(QWidget *parent) :
 
 FT_Account::~FT_Account()
 {
-    delete ui;
+  delete ui;
+}
+
+Ui::FT_Account *FT_Account::Get_ui()
+{
+  return ui;
 }
 
 void FT_Account::Slot_SetTitles(const QString &titleTop,

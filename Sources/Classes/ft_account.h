@@ -16,6 +16,7 @@ class FT_Account : public QWidget
 public:
     explicit FT_Account(QWidget *parent = 0);
     ~FT_Account();
+    Ui::FT_Account* Get_ui(void);
 
 public slots:
     void Slot_SetTitles(const QString& titleTop,
