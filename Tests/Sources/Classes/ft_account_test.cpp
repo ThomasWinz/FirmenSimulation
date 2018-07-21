@@ -7,11 +7,10 @@
 
 class Ft_Account_Override : public FT_Account {
  public:
-  MOCK_METHOD4(Slot_AddValue, void(
-                             QTableWidget*,
-                             QLineEdit*,
+  MOCK_METHOD3(Slot_AddValue, void(
                              const QString&,
-                             double));
+                             double,
+                             FT_Account::en_Columns));
 };
 
 class Ft_Account_Test : public ::testing::Test {
@@ -73,10 +72,9 @@ TEST_F(Ft_Account_Test, Slot_AddLeft) {
   QString titleGiven = "testTitleGiven1337";
   double valueEuroGiven = 126564235.123542;
   EXPECT_CALL(m_Account_Override,
-              Slot_AddValue(tableGiven,
-                            lineEditGiven,
-                            titleGiven,
-                            valueEuroGiven));
+              Slot_AddValue(titleGiven,
+                            valueEuroGiven,
+                            FT_Account::en_Columns::Column_Left));
   m_Account_Override.Slot_AddLeft(titleGiven,
                                   valueEuroGiven);
 
@@ -88,10 +86,9 @@ TEST_F(Ft_Account_Test, Slot_AddRight) {
   QString titleGiven = "testTitleGiven1337";
   double valueEuroGiven = 126564235.123542;
   EXPECT_CALL(m_Account_Override,
-              Slot_AddValue(tableGiven,
-                            lineEditGiven,
-                            titleGiven,
-                            valueEuroGiven));
+              Slot_AddValue(titleGiven,
+                            valueEuroGiven,
+                            FT_Account::en_Columns::Column_Right));
   m_Account_Override.Slot_AddRight(titleGiven,
                                   valueEuroGiven);
 }
@@ -102,8 +99,8 @@ TEST_F(Ft_Account_Test, Slot_AddRight) {
                        const QString& title,
                        double valueEuro); */
 TEST_F(Ft_Account_Test, Slot_AddValue) {
-  QTableWidget* tableGiven = new QTableWidget(NULL);
-  QLineEdit* lineEditGiven = new QLineEdit(NULL);
+  QTableWidget* tableGiven = m_Account.ui->tableWidget_left;
+  QLineEdit* lineEditGiven = m_Account.ui->lineEdit_sumLeft;
   QString titleGiven = "testTitleGiven1337";
   double valueEuroGiven = 126564235.123542;
 
@@ -112,10 +109,9 @@ TEST_F(Ft_Account_Test, Slot_AddValue) {
   EXPECT_EQ(lineEditGiven->text().toDouble(),
             0.0);
 
-  m_Account.Slot_AddValue(tableGiven,
-                          lineEditGiven,
-                          titleGiven,
-                          valueEuroGiven);
+  m_Account.Slot_AddValue(titleGiven,
+                          valueEuroGiven,
+                          FT_Account::en_Columns::Column_Left);
 
   EXPECT_EQ(tableGiven->rowCount(),
             1);

@@ -5,6 +5,8 @@
 #include <QTimer>
 #include <QSettings>
 
+#include "Classes/ft_account.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -24,7 +26,8 @@ private slots:
     void on_pushButton_stop_clicked();
 
     void on_pushButton_reset_clicked();
-
+    void Slot_NewAccount_Active(const QString& title,
+                                double value);
 private:
     Ui::MainWindow *ui;
     QTimer* m_StepTimer = NULL;
@@ -34,6 +37,8 @@ private:
     const double m_weeksPerMonth = 4.0;
     const double m_daysPerWeek = 30.0;
     QSettings* m_Settings = NULL;
+
+    FT_Account* m_accountBilanz = NULL;
 };
 
 #endif // MAINWINDOW_H
