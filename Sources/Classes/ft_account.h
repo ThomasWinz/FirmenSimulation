@@ -25,7 +25,7 @@ public:
     en_AccountType_Activa,
     en_AccountType_Passiva,
     en_AccountType_Aufwandskonto,
-    en_AccountType_Erloeskonto
+    en_AccountType_Erfolgskonto
   };
 
   enum en_Columns {
@@ -45,7 +45,7 @@ public slots:
                     double valueEuro);
   void Slot_AddRight(const QString& title,
                      double valueEuro);
-  void Slot_SetAccountType(en_AccountTypes type);
+  void Slot_SetAccountType(en_AccountTypes accountType);
 
   void Slot_AccountSumChanged(double valueEuro,
                               en_Columns column);
@@ -55,7 +55,6 @@ public slots:
 #ifdef UNITTESTS
   virtual
 #else
-private slots:
 #endif
   void Slot_AddValue(const QString& title,
                      double valueEuro,

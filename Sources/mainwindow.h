@@ -6,6 +6,7 @@
 #include <QSettings>
 
 #include "Classes/ft_account.h"
+#include "Classes/ft_accountmanager.h"
 
 namespace Ui {
 class MainWindow;
@@ -39,6 +40,7 @@ private:
     QSettings* m_Settings = NULL;
 
     FT_Account* m_accountBilanz = NULL;
+    FT_AccountManager m_accountManager;
 };
 
 #endif // MAINWINDOW_H

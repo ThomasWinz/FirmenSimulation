@@ -27,10 +27,13 @@ DEFINES += UNITTESTS
 SOURCES += \
         Sources/main.cpp \
         ../Sources/Classes/ft_account.cpp \
-    Sources/Classes/ft_account_test.cpp
+        ../Sources/Classes/ft_accountmanager.cpp \
+        Sources/Classes/ft_account_test.cpp \
+        Sources/Classes/ft_accountmanager_test.cpp
 
 HEADERS += \
-        ../Sources/Classes/ft_account.h
+        ../Sources/Classes/ft_account.h \
+        ../Sources/Classes/ft_accountmanager.h
 
 FORMS += \
         ../Sources/Classes/ft_account.ui

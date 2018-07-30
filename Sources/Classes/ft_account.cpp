@@ -80,9 +80,9 @@ void FT_Account::Slot_AddRight(const QString &title,
   return;
 }
 
-void FT_Account::Slot_SetAccountType(FT_Account::en_AccountTypes type)
+void FT_Account::Slot_SetAccountType(FT_Account::en_AccountTypes accountType)
 {
-  m_MyType = type;
+  m_MyType = accountType;
 
   return;
 }

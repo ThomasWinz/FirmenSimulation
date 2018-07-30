@@ -53,10 +53,14 @@ MainWindow::MainWindow(QWidget *parent) :
   Slot_NewAccount_Active("Bank",
                          200.0);
 
-  m_accountBilanz->Slot_AddRight("EK",
-                               140.0);
-  m_accountBilanz->Slot_AddRight("VB",
-                               160.0);
+//  m_accountBilanz->Slot_AddRight("EK",
+//                               140.0);
+//  m_accountBilanz->Slot_AddRight("VB",
+//                               160.0);
+
+  m_accountManager.Slot_SendFromTo("Bank",
+                                   "BGA",
+                                   11.11);
 
 
 }
@@ -64,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::Slot_NewAccount_Active(const QString& title,
                                         double value) {
   FT_Account* account = new FT_Account(NULL);
+#if 0
   account->show();
   account->Slot_SetTitles(title,
                           "Soll",
@@ -79,6 +84,11 @@ void MainWindow::Slot_NewAccount_Active(const QString& title,
 
   account->Slot_AddLeft("EBK",
                         value);
+#endif
+  m_accountManager.Slot_RegisterAccount(title,
+                                         "Soll",
+                                         "Haben",
+                                         FT_Account::en_AccountTypes::en_AccountType_Activa);
 }
 
 MainWindow::~MainWindow()
