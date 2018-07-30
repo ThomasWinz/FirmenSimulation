@@ -119,13 +119,36 @@ void FT_Account::Slot_AccountSumChanged(double valueEuro,
     }  // for
 
     if (true == entryFound){
-
+      Slot_UpdateSum(column);
     } else {
       Slot_AddValue(senderTitle,
                     valueEuro,
                     column);
     }
   }
+}
+
+void FT_Account::Slot_UpdateSum(en_Columns column) {
+  QTableWidget* table = NULL;
+  QLineEdit* lineEdit = NULL;
+
+  switch (column) {
+  case en_Columns::Column_Left:
+  case en_Columns::Column_Right:
+    table = m_tables[column];
+    lineEdit = m_lineEdits[column];
+    break;
+  default:
+    break;
+  }
+
+  double newSum = 0.0;
+  for (int32_t i = 0; table->rowCount() > i; i++) {
+    newSum += table->item(i, Column_Right)->text().toDouble();
+  }
+
+  QString valueSumText = QString::number(newSum, 'f', 2);
+  lineEdit->setText(valueSumText);
 }
 
 void FT_Account::Slot_AddValue(const QString &title,

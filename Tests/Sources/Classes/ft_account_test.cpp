@@ -121,3 +121,39 @@ TEST_F(Ft_Account_Test, Slot_AddValue) {
   EXPECT_EQ(textCalculated,
               textExpected);
 }
+
+TEST_F(Ft_Account_Test, Slot_UpdateSum_Left) {
+
+  uint32_t numOfRowsGiven = 1000;
+  double sumExpected = 0.0;
+  for (uint32_t i = 0; numOfRowsGiven > i; i++) {
+    m_Account.Slot_AddLeft("Dummy",
+                           i);
+
+    sumExpected += i;
+  }
+
+  m_Account.Slot_UpdateSum(FT_Account::en_Columns::Column_Left);
+
+  EXPECT_NEAR(sumExpected,
+              m_Account.ui->lineEdit_sumLeft->text().toDouble(),
+              0.000001);
+}
+
+TEST_F(Ft_Account_Test, Slot_UpdateSum_Right) {
+
+  uint32_t numOfRowsGiven = 1001;
+  double sumExpected = 0.0;
+  for (uint32_t i = 0; numOfRowsGiven > i; i++) {
+    m_Account.Slot_AddRight("Dummy",
+                            i);
+
+    sumExpected += i;
+  }
+
+  m_Account.Slot_UpdateSum(FT_Account::en_Columns::Column_Right);
+
+  EXPECT_NEAR(sumExpected,
+              m_Account.ui->lineEdit_sumRight->text().toDouble(),
+              0.000001);
+}

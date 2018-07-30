@@ -49,6 +49,7 @@ public slots:
 
   void Slot_AccountSumChanged(double valueEuro,
                               en_Columns column);
+  void Slot_UpdateSum(en_Columns column);
 
 
 #ifdef UNITTESTS
