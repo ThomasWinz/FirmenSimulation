@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <konten>
+        <data:konto id=1 name="BGA" long_name="Betriebs- und Geschäftsausstattung" type="aktiv">
+            <eröffnungsbestand currency="€" scale="cents" column="soll">10000</eröffnungsbestand>
+        </data:konto>
+        <data:konto id=2 name="Bank" long_name="Bankguthaben" type="aktiv">
+            <eröffnungsbestand currency="€" scale="cents" column="soll">20000</eröffnungsbestand>
+        </data:konto>
+        <data:konto id=3 name="EK" long_name="Eigenkapital" type="passiv">
+            <eröffnungsbestand currency="€" scale="cents" column="haben">14000</eröffnungsbestand>
+        </data:konto>
+        <data:konto id=4 name="VB" long_name="Verbindlichkeiten" type="passiv">
+            <eröffnungsbestand currency="€" scale="cents" column="haben">15000</eröffnungsbestand>
+        </data:konto>
+        <data:konto id=5 name="Löhne" type="aufwand">
+        </data:konto>
+        <data:konto id=6 name="miete" type="aufwand">
+        </data:konto>
+        <data:konto id=7 name="Ums.E." long_name="Umsatzerlöse" type="ertrag">
+        </data:konto>
+        <data:konto id=8 name="GuV" long_name="Gewinn- und Verlustrechnung" type="abschluss">
+        </data:konto>
+        <data:konto id=9 name="SBK" long_name="Schlussbestandskonto" type="abschluss">
+        </data:konto>
+    </konten>
+    <buchungen>
+        <buchung id=1 kennung="1. Kauf eines PC auf Ziel für 50">
+            <soll><ref:konto id=1></soll>
+            <haben><ref:konto id=4></haben>
+            <betrag currency="€" scale="cents">5000</betrag>
+        </buchung>
+        <buchung id=2 kennung="2. Lohnzahlung per Bank">
+            <soll><ref:konto id=5></soll>
+            <haben><ref:konto id=2></haben>
+            <betrag currency="€" scale="cents">3000</betrag>
+        </buchung>
+        <buchung id=3 kennung="3. Miete">
+            <soll><ref:konto id=6></soll>
+            <haben><ref:konto id=2></haben>
+            <betrag currency="€" scale="cents">2000</betrag>
+        </buchung>
+        <buchung id=4 kennung="Verkauf von Waren">
+            <soll><ref:konto id=2></soll>
+            <haben><ref:konto id=7></haben>
+            <betrag currency="€" scale="cents">9000</betrag>
+        </buchung>
+    </buchungen>
+</dataset>
