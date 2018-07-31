@@ -151,6 +151,20 @@ void FT_Account::Slot_UpdateSum(en_Columns column) {
   lineEdit->setText(valueSumText);
 }
 
+void FT_Account::Slot_Finish()
+{
+  /** @note Summe links und rechts bilden */
+  Slot_UpdateSum(en_Columns::Column_Left);
+  Slot_UpdateSum(en_Columns::Column_Right);
+
+  /** @note Welche Seite ist niedriger */
+  double sumLeft = ui->lineEdit_sumLeft->text().toDouble();
+  double sumRight = ui->lineEdit_sumRight->text().toDouble();
+
+  emit Signal_Finish(sumLeft,
+                     sumRight);
+}
+
 void FT_Account::Slot_AddValue(const QString &title,
                                double valueEuro,
                                en_Columns column) {
@@ -190,4 +204,9 @@ void FT_Account::on_pushButton_enterLeft_clicked()
 {
   Slot_AddLeft(ui->lineEdit_enterTitleLeft->text(),
                ui->doubleSpinBox_enterValueLeft->value());
+}
+
+void FT_Account::on_pushButton_finish_clicked()
+{
+
 }

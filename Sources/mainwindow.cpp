@@ -48,47 +48,84 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-  Slot_NewAccount_Active("BGA",
+  Slot_NewAccount_Active("Büro- und Geschäftsausstattung",
                          100.0);
   Slot_NewAccount_Active("Bank",
                          200.0);
+
+  Slot_NewAccount_Passive("Eigenkapital",
+                         140.0);
+
+  Slot_NewAccount_Passive("Verbindlichkeiten",
+                         160.0);
+
+  Slot_NewAccount_Aufwand("Löhne",
+                         140.0);
+
+  Slot_NewAccount_Aufwand("Miete",
+                         0.0);
+
+  Slot_NewAccount_Ertrag("Umsatzerlöse",
+                         0.0);
+
+  /** Guv - Gewinn und Verlust */
+  Slot_NewAccount_Abschluss("GUV",
+                            0.0);
 
 //  m_accountBilanz->Slot_AddRight("EK",
 //                               140.0);
 //  m_accountBilanz->Slot_AddRight("VB",
 //                               160.0);
 
+  m_accountManager.Slot_SendFromTo("Büro- und Geschäftsausstattung",
+                                   "Verbindlichkeiten",
+                                   50.0);
+  m_accountManager.Slot_SendFromTo("Löhne",
+                                   "Bank",
+                                   30.0);
+  m_accountManager.Slot_SendFromTo("Miete",
+                                   "Bank",
+                                   20.0);
   m_accountManager.Slot_SendFromTo("Bank",
-                                   "BGA",
-                                   11.11);
-
-
+                                   "Umsatzerlöse",
+                                   90.0);
 }
 
 void MainWindow::Slot_NewAccount_Active(const QString& title,
                                         double value) {
-  FT_Account* account = new FT_Account(NULL);
-#if 0
-  account->show();
-  account->Slot_SetTitles(title,
-                          "Soll",
-                          "Haben");
-  account->Slot_SetAccountType(FT_Account::en_AccountType_Activa);
-
-
-
-//  m_accountBilanz->Slot_AddLeft(title,
-//                                value);
-  connect(account, &FT_Account::Signal_AccountSumChanged,
-          m_accountBilanz, &FT_Account::Slot_AccountSumChanged);
-
-  account->Slot_AddLeft("EBK",
-                        value);
-#endif
   m_accountManager.Slot_RegisterAccount(title,
                                          "Soll",
                                          "Haben",
-                                         FT_Account::en_AccountTypes::en_AccountType_Activa);
+                                        FT_Account::en_AccountTypes::en_AccountType_Activa);
+}
+
+void MainWindow::Slot_NewAccount_Passive(const QString &title, double value) {
+  m_accountManager.Slot_RegisterAccount(title,
+                                         "Soll",
+                                         "Haben",
+                                        FT_Account::en_AccountTypes::en_AccountType_Passiva);
+}
+
+void MainWindow::Slot_NewAccount_Aufwand(const QString &title, double value) {
+  m_accountManager.Slot_RegisterAccount(title,
+                                         "Soll",
+                                         "Haben",
+                                         FT_Account::en_AccountTypes::en_AccountType_Aufwandskonto);
+}
+
+void MainWindow::Slot_NewAccount_Ertrag(const QString &title, double value) {
+  m_accountManager.Slot_RegisterAccount(title,
+                                         "Soll",
+                                         "Haben",
+                                         FT_Account::en_AccountTypes::en_AccountType_Ertragskonto);
+}
+
+void MainWindow::Slot_NewAccount_Abschluss(const QString& title,
+                               double value) {
+  m_accountManager.Slot_RegisterAccount(title,
+                                         "Soll",
+                                         "Haben",
+                                         FT_Account::en_AccountTypes::en_AccountType_Abschlusskonto);
 }
 
 MainWindow::~MainWindow()
@@ -166,4 +203,9 @@ void MainWindow::on_pushButton_reset_clicked()
   ui->lcdNumber_cashVirtual->display(m_cashVirtual);
 
   ui->lcdNumber_cash->display(ui->doubleSpinBox_startupCash->value());
+}
+
+void MainWindow::on_pushButton_finish_clicked()
+{
+  m_accountManager.Slot_TriggerFinish();
 }

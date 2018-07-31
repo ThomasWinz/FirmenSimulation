@@ -29,6 +29,16 @@ private slots:
     void on_pushButton_reset_clicked();
     void Slot_NewAccount_Active(const QString& title,
                                 double value);
+    void Slot_NewAccount_Passive(const QString& title,
+                                 double value);
+    void Slot_NewAccount_Aufwand(const QString& title,
+                                 double value);
+    void Slot_NewAccount_Ertrag(const QString& title,
+                                double value);
+    void Slot_NewAccount_Abschluss(const QString& title,
+                                   double value);
+    void on_pushButton_finish_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer* m_StepTimer = NULL;

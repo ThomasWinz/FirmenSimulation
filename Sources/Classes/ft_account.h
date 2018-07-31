@@ -17,16 +17,20 @@ class FT_Account : public QWidget
 public:
   explicit FT_Account(QWidget *parent = 0);
   ~FT_Account();
-  Ui::FT_Account* Get_ui(void);
-  QString Get_Title(void);
 
   enum en_AccountTypes{
     en_AccountType_Bilanz,
     en_AccountType_Activa,
     en_AccountType_Passiva,
     en_AccountType_Aufwandskonto,
-    en_AccountType_Erfolgskonto
+    en_AccountType_Ertragskonto,
+    en_AccountType_Abschlusskonto,
+    sizeof_en_AccountTypes
   };
+
+  Ui::FT_Account* Get_ui(void);
+  QString Get_Title(void);
+  en_AccountTypes Get_Type(void) { return m_MyType; }
 
   enum en_Columns {
     Column_Left = 0,
@@ -36,6 +40,8 @@ public:
 signals:
   void Signal_AccountSumChanged(double valueEuro,
                                 en_Columns column);
+  void Signal_Finish(double valueLeft,
+                     double valueRight);
 public slots:
   void Slot_SetTitles(const QString& titleTop,
                       const QString& titleLeft,
@@ -50,7 +56,7 @@ public slots:
   void Slot_AccountSumChanged(double valueEuro,
                               en_Columns column);
   void Slot_UpdateSum(en_Columns column);
-
+  void Slot_Finish(void);
 
 #ifdef UNITTESTS
   virtual
@@ -64,6 +70,9 @@ public slots:
 #ifdef UNITTESTS
 public:
 #else
+
+private slots:
+  void on_pushButton_finish_clicked();
 
 private:
 #endif
