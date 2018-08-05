@@ -36,7 +36,8 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui \
-        Classes/ft_account.ui
+        Classes/ft_account.ui \
+    Classes/ft_accountmanager.ui
 
 RESOURCES += \
     Ressources/ressources.qrc

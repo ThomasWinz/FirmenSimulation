@@ -89,6 +89,10 @@ MainWindow::MainWindow(QWidget *parent) :
   m_accountManager.Slot_SendFromTo("Bank",
                                    "Umsatzerlöse",
                                    90.0);
+
+  m_accountManager.show();
+
+  m_accountManager.Slot_Init();
 }
 
 void MainWindow::Slot_NewAccount_Active(const QString& title,

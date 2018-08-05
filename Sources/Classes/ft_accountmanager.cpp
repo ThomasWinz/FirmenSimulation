@@ -1,11 +1,28 @@
 
 #include <QDebug>
 
+#include "ui_ft_accountmanager.h"
 #include "ft_accountmanager.h"
 
-FT_AccountManager::FT_AccountManager(QObject *parent) : QObject(parent)
+FT_AccountManager::FT_AccountManager(QWidget *parent) : QWidget(parent),
+  ui(new Ui::FT_AccountManager)
 {
+  ui->setupUi(this);
 
+  m_layoutLeft = ui->verticalLayout;
+  m_layoutRight = ui->verticalLayout_2;
+}
+
+void FT_AccountManager::resizeEvent(QResizeEvent *event)
+{
+  if (-1 != m_indexesShown[0])
+  {
+    m_AccountList[m_indexesShown[0]]->setGeometry(QRect(0, 0, ui->widget_contentLeft->geometry().width(), ui->widget_contentLeft->geometry().height()));
+  }
+  if (-1 != m_indexesShown[1])
+  {
+    m_AccountList[m_indexesShown[1]]->setGeometry(QRect(0, 0, ui->widget_contentRight->geometry().width(), ui->widget_contentRight->geometry().height()));
+  }
 }
 
 void FT_AccountManager::Slot_RegisterAccount(const QString &accountName,
@@ -22,12 +39,15 @@ void FT_AccountManager::Slot_RegisterAccount(const QString &accountName,
 
   newAccount->Slot_SetAccountType(accountType);
 
-  newAccount->show();
-
   connect(newAccount, &FT_Account::Signal_Finish,
           this, &FT_AccountManager::Slot_Finish);
 
   m_AccountList.append(newAccount);
+
+  Slot_UpdateCombobox(ui->comboBox_accountLeft,
+                      accountName);
+  Slot_UpdateCombobox(ui->comboBox_accountRight,
+                      accountName);
 }
 
 void FT_AccountManager::Slot_SendFromTo(const FT_AccountManager::st_booking& booking)
@@ -116,6 +136,12 @@ void FT_AccountManager::Slot_TriggerFinish()
   }
 }
 
+void FT_AccountManager::Slot_Init()
+{
+  on_comboBox_accountLeft_activated(0);
+  on_comboBox_accountRight_activated(1);
+}
+
 void FT_AccountManager::Slot_SendFromTo_Add(const FT_AccountManager::st_booking &booking, int32_t indexSource, int32_t indexTarget)
 {
   QString textSource = "";
@@ -141,4 +167,53 @@ void FT_AccountManager::Slot_SendFromTo_Add(const FT_AccountManager::st_booking 
   m_AccountList[indexTarget]->Slot_AddValue(textSource,
                                             booking.m_valueEuro,
                                             FT_Account::en_Columns::Column_Right);
+}
+
+void FT_AccountManager::Slot_ShowInWidget(QWidget* widget, int32_t index)
+{
+  for (int32_t i = 0; m_AccountList.count() > i; i++)
+  {
+    if (m_indexesShown[0] == i || m_indexesShown[1] == i)
+    {
+
+    }
+    else
+    {
+      m_AccountList[i]->hide();
+    }
+  }
+  m_AccountList[index]->setParent(widget);
+  int32_t width = widget->geometry().width();
+  int32_t height = widget->geometry().height();
+  m_AccountList[index]->setGeometry(QRect(0, 0, width, height));
+  m_AccountList[index]->show();
+}
+
+void FT_AccountManager::Slot_UpdateCombobox(QComboBox* combobox,
+                                            const QString& title)
+{
+  combobox->insertItem(combobox->count(), title);
+}
+
+
+void FT_AccountManager::on_comboBox_accountLeft_activated(int index)
+{
+  if (m_indexesShown[1] == index)
+  {
+    m_indexesShown[1] = -1;
+  }
+  m_indexesShown[0] = index;
+  Slot_ShowInWidget(ui->widget_contentLeft,
+                    index);
+}
+
+void FT_AccountManager::on_comboBox_accountRight_activated(int index)
+{
+  if (m_indexesShown[0] == index)
+  {
+    m_indexesShown[0] = -1;
+  }
+  m_indexesShown[1] = index;
+  Slot_ShowInWidget(ui->widget_contentRight,
+                    index);
 }
