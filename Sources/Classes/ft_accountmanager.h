@@ -33,15 +33,23 @@ public:
 
   virtual void resizeEvent(QResizeEvent* event);
 
+signals:
+  void Signal_ActivePassivaChanged(double valueEuro,
+                                FT_Account::en_Columns column);
 public slots:
   void Slot_RegisterAccount(const QString& accountName,
                             const QString& leftText,
                             const QString& rightText,
-                            FT_Account::en_AccountTypes accountType);
+                            FT_Account::en_AccountTypes accountType,
+                            FT_Account* bilanzAccount = NULL);
   void Slot_SendFromTo(const st_booking &booking);
   void Slot_SendFromTo(const QString& accountNameSource,
                        const QString& accountNameTarget,
                        double valueEuro);
+  void Slot_SendFromTo(int32_t indexSource,
+                       int32_t indexTarget,
+                       double valueEuro);
+
   void Slot_Finish(double valueLeft,
                    double valueRight);
   void Slot_TriggerFinish(void);
@@ -70,6 +78,8 @@ private slots:
 
   void on_comboBox_accountLeft_activated(int index);
   void on_comboBox_accountRight_activated(int index);
+  void on_pushButton_toLeft_clicked();
+  void on_pushButton_toRight_clicked();
 };
 
 #endif // FT_ACCOUNTMANAGER_H

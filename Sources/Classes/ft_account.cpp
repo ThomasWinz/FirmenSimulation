@@ -87,7 +87,6 @@ void FT_Account::Slot_SetAccountType(FT_Account::en_AccountTypes accountType)
   return;
 }
 
-
 void FT_Account::Slot_AccountSumChanged(double valueEuro,
                                         FT_Account::en_Columns column)
 {
@@ -198,15 +197,4 @@ void FT_Account::Slot_AddValue(const QString &title,
 
   emit Signal_AccountSumChanged(valueEuro,
                                 column);
-}
-
-void FT_Account::on_pushButton_enterLeft_clicked()
-{
-  Slot_AddLeft(ui->lineEdit_enterTitleLeft->text(),
-               ui->doubleSpinBox_enterValueLeft->value());
-}
-
-void FT_Account::on_pushButton_finish_clicked()
-{
-
 }

@@ -11,6 +11,9 @@ FT_AccountManager::FT_AccountManager(QWidget *parent) : QWidget(parent),
 
   m_layoutLeft = ui->verticalLayout;
   m_layoutRight = ui->verticalLayout_2;
+
+  connect(ui->pushButton_finish, &QPushButton::clicked,
+          this, &FT_AccountManager::Slot_TriggerFinish);
 }
 
 void FT_AccountManager::resizeEvent(QResizeEvent *event)
@@ -28,7 +31,7 @@ void FT_AccountManager::resizeEvent(QResizeEvent *event)
 void FT_AccountManager::Slot_RegisterAccount(const QString &accountName,
                                              const QString &leftText,
                                              const QString &rightText,
-                                             FT_Account::en_AccountTypes accountType)
+                                             FT_Account::en_AccountTypes accountType, FT_Account *bilanzAccount)
 {
 
   FT_Account* newAccount = new FT_Account();
@@ -48,6 +51,24 @@ void FT_AccountManager::Slot_RegisterAccount(const QString &accountName,
                       accountName);
   Slot_UpdateCombobox(ui->comboBox_accountRight,
                       accountName);
+
+  if (NULL == bilanzAccount)
+  {
+
+  }
+  else
+  {
+    switch (accountType)
+    {
+      case FT_Account::en_AccountType_Activa:
+      case FT_Account::en_AccountType_Passiva:
+        connect(newAccount, &FT_Account::Signal_AccountSumChanged,
+                bilanzAccount, &FT_Account::Slot_AccountSumChanged);
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 void FT_AccountManager::Slot_SendFromTo(const FT_AccountManager::st_booking& booking)
@@ -96,6 +117,22 @@ void FT_AccountManager::Slot_SendFromTo(const QString &accountNameSource,
   booking.m_valueEuro = valueEuro;
 
   Slot_SendFromTo(booking);
+}
+
+void FT_AccountManager::Slot_SendFromTo(int32_t indexSource,
+                                        int32_t indexTarget,
+                                        double valueEuro)
+{
+  st_booking booking;
+
+  booking.m_accountNameSource = m_AccountList[indexSource]->Get_Title();
+  booking.m_accountNameTarget = m_AccountList[indexTarget]->Get_Title();
+  booking.m_valueEuro = valueEuro;
+
+  Slot_SendFromTo_Add(booking,
+                      indexSource,
+                      indexTarget);
+  return;
 }
 
 void FT_AccountManager::Slot_Finish(double valueLeft, double valueRight)
@@ -216,4 +253,19 @@ void FT_AccountManager::on_comboBox_accountRight_activated(int index)
   m_indexesShown[1] = index;
   Slot_ShowInWidget(ui->widget_contentRight,
                     index);
+}
+
+
+void FT_AccountManager::on_pushButton_toLeft_clicked()
+{
+  Slot_SendFromTo(ui->comboBox_accountRight->currentIndex(),
+                  ui->comboBox_accountLeft->currentIndex(),
+                  ui->doubleSpinBox_value->value());
+}
+
+void FT_AccountManager::on_pushButton_toRight_clicked()
+{
+  Slot_SendFromTo(ui->comboBox_accountLeft->currentIndex(),
+                  ui->comboBox_accountRight->currentIndex(),
+                  ui->doubleSpinBox_value->value());
 }

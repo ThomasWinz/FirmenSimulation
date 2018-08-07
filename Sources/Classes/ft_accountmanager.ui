@@ -119,6 +119,13 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="QPushButton" name="pushButton_finish">
+     <property name="text">
+      <string>Abschluss</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

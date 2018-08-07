@@ -46,48 +46,26 @@ MainWindow::MainWindow(QWidget *parent) :
                                 "Activa",
                                 "Passiva");
 
+  for (uint32_t i = 0; en_Accounts::sizeof_en_Accounts > i; i++)
+  {
+    m_accountManager.Slot_RegisterAccount(m_Accounts[i].m_name,
+                                           "Soll",
+                                           "Haben",
+                                          m_Accounts[i].m_type,
+                                          m_accountBilanz);
+  }
 
-
-  Slot_NewAccount_Active("Büro- und Geschäftsausstattung",
-                         100.0);
-  Slot_NewAccount_Active("Bank",
-                         200.0);
-
-  Slot_NewAccount_Passive("Eigenkapital",
-                         140.0);
-
-  Slot_NewAccount_Passive("Verbindlichkeiten",
-                         160.0);
-
-  Slot_NewAccount_Aufwand("Löhne",
-                         140.0);
-
-  Slot_NewAccount_Aufwand("Miete",
-                         0.0);
-
-  Slot_NewAccount_Ertrag("Umsatzerlöse",
-                         0.0);
-
-  /** Guv - Gewinn und Verlust */
-  Slot_NewAccount_Abschluss("GUV",
-                            0.0);
-
-//  m_accountBilanz->Slot_AddRight("EK",
-//                               140.0);
-//  m_accountBilanz->Slot_AddRight("VB",
-//                               160.0);
-
-  m_accountManager.Slot_SendFromTo("Büro- und Geschäftsausstattung",
-                                   "Verbindlichkeiten",
+  m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_BueroGeschAusst,
+                                   en_Accounts::en_Account_Verbindlichkeiten,
                                    50.0);
-  m_accountManager.Slot_SendFromTo("Löhne",
-                                   "Bank",
+  m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Loehne,
+                                   en_Accounts::en_Account_Bank,
                                    30.0);
-  m_accountManager.Slot_SendFromTo("Miete",
-                                   "Bank",
+  m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Miete,
+                                   en_Accounts::en_Account_Bank,
                                    20.0);
-  m_accountManager.Slot_SendFromTo("Bank",
-                                   "Umsatzerlöse",
+  m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Bank,
+                                   en_Accounts::en_Account_Umsatzerloese,
                                    90.0);
 
   m_accountManager.show();
@@ -95,42 +73,6 @@ MainWindow::MainWindow(QWidget *parent) :
   m_accountManager.Slot_Init();
 }
 
-void MainWindow::Slot_NewAccount_Active(const QString& title,
-                                        double value) {
-  m_accountManager.Slot_RegisterAccount(title,
-                                         "Soll",
-                                         "Haben",
-                                        FT_Account::en_AccountTypes::en_AccountType_Activa);
-}
-
-void MainWindow::Slot_NewAccount_Passive(const QString &title, double value) {
-  m_accountManager.Slot_RegisterAccount(title,
-                                         "Soll",
-                                         "Haben",
-                                        FT_Account::en_AccountTypes::en_AccountType_Passiva);
-}
-
-void MainWindow::Slot_NewAccount_Aufwand(const QString &title, double value) {
-  m_accountManager.Slot_RegisterAccount(title,
-                                         "Soll",
-                                         "Haben",
-                                         FT_Account::en_AccountTypes::en_AccountType_Aufwandskonto);
-}
-
-void MainWindow::Slot_NewAccount_Ertrag(const QString &title, double value) {
-  m_accountManager.Slot_RegisterAccount(title,
-                                         "Soll",
-                                         "Haben",
-                                         FT_Account::en_AccountTypes::en_AccountType_Ertragskonto);
-}
-
-void MainWindow::Slot_NewAccount_Abschluss(const QString& title,
-                               double value) {
-  m_accountManager.Slot_RegisterAccount(title,
-                                         "Soll",
-                                         "Haben",
-                                         FT_Account::en_AccountTypes::en_AccountType_Abschlusskonto);
-}
 
 MainWindow::~MainWindow()
 {

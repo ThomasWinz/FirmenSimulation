@@ -65,14 +65,11 @@ public slots:
   void Slot_AddValue(const QString& title,
                      double valueEuro,
                      en_Columns column);
-  void on_pushButton_enterLeft_clicked();
 
 #ifdef UNITTESTS
 public:
 #else
 
-private slots:
-  void on_pushButton_finish_clicked();
 
 private:
 #endif
@@ -90,7 +87,6 @@ private:
 
   QTableWidget* m_tables[en_Columns::sizeof_en_Columns];
   QLineEdit* m_lineEdits[en_Columns::sizeof_en_Columns];
-
 };
 
 #endif // FT_ACCOUNT_H

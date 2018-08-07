@@ -27,16 +27,7 @@ private slots:
     void on_pushButton_stop_clicked();
 
     void on_pushButton_reset_clicked();
-    void Slot_NewAccount_Active(const QString& title,
-                                double value);
-    void Slot_NewAccount_Passive(const QString& title,
-                                 double value);
-    void Slot_NewAccount_Aufwand(const QString& title,
-                                 double value);
-    void Slot_NewAccount_Ertrag(const QString& title,
-                                double value);
-    void Slot_NewAccount_Abschluss(const QString& title,
-                                   double value);
+
     void on_pushButton_finish_clicked();
 
 private:
@@ -51,6 +42,61 @@ private:
 
     FT_Account* m_accountBilanz = NULL;
     FT_AccountManager m_accountManager;
+
+    enum en_Accounts
+    {
+      en_Account_Loehne = 0,
+      en_Account_Miete,
+      en_Account_BueroGeschAusst,
+      en_Account_Bank,
+      en_Account_Eigenkapital,
+      en_Account_Verbindlichkeiten,
+      en_Account_Umsatzerloese,
+      en_Account_GUV,
+      sizeof_en_Accounts
+    };
+
+    struct st_Accounts
+    {
+      const QString m_name;
+      FT_Account::en_AccountTypes m_type;
+    };
+
+    st_Accounts m_Accounts[en_Accounts::sizeof_en_Accounts] =
+    {
+      {  // en_Account_Loehne
+        "Löhne",
+        FT_Account::en_AccountTypes::en_AccountType_Aufwandskonto
+      },
+      {  // en_Account_Miete
+        "Miete",
+        FT_Account::en_AccountTypes::en_AccountType_Aufwandskonto
+      },
+      {  // en_Account_BueroGeschAusst
+        "Büro- und Geschäftsausstattung",
+        FT_Account::en_AccountTypes::en_AccountType_Activa
+      },
+      {  // en_Account_Bank
+        "Bank",
+        FT_Account::en_AccountTypes::en_AccountType_Activa
+      },
+      {  // en_Account_Eigenkapital
+        "Eigenkapital",
+        FT_Account::en_AccountTypes::en_AccountType_Passiva
+      },
+      {  // en_Account_Verbindlichkeiten
+        "Verbindlichkeiten",
+        FT_Account::en_AccountTypes::en_AccountType_Passiva
+      },
+      {  // en_Account_Umsatzerloese
+        "Umsatzerlöse",
+        FT_Account::en_AccountTypes::en_AccountType_Ertragskonto
+      },
+      {  // en_Account_GUV
+        "GUV",
+        FT_Account::en_AccountTypes::en_AccountType_Abschlusskonto
+      },
+    };
 };
 
 #endif // MAINWINDOW_H
