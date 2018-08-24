@@ -31,7 +31,8 @@ void FT_AccountManager::resizeEvent(QResizeEvent *event)
 void FT_AccountManager::Slot_RegisterAccount(const QString &accountName,
                                              const QString &leftText,
                                              const QString &rightText,
-                                             FT_Account::en_AccountTypes accountType, FT_Account *bilanzAccount)
+                                             FT_Account::en_AccountTypes accountType,
+                                             FT_Account *bilanzAccount)
 {
 
   FT_Account* newAccount = new FT_Account();
@@ -58,16 +59,24 @@ void FT_AccountManager::Slot_RegisterAccount(const QString &accountName,
   }
   else
   {
+    if (NULL == m_bilanzAccount)
+    {
+      m_bilanzAccount = bilanzAccount;
+    }
+#warning no live update
+#if 0
     switch (accountType)
     {
       case FT_Account::en_AccountType_Activa:
       case FT_Account::en_AccountType_Passiva:
+
         connect(newAccount, &FT_Account::Signal_AccountSumChanged,
                 bilanzAccount, &FT_Account::Slot_AccountSumChanged);
         break;
       default:
         break;
     }
+#endif
   }
 }
 
@@ -137,6 +146,29 @@ void FT_AccountManager::Slot_SendFromTo(int32_t indexSource,
 
 void FT_AccountManager::Slot_Finish(double valueLeft, double valueRight)
 {
+  switch (reinterpret_cast<FT_Account*>(sender())->Get_Type())
+  {
+    case FT_Account::en_AccountTypes::en_AccountType_Aufwandskonto:
+    case FT_Account::en_AccountTypes::en_AccountType_Ertragskonto:
+      Slot_Finish_AufwandErtrag(valueLeft,
+                                valueRight);
+      break;
+    case FT_Account::en_AccountTypes::en_AccountType_Abschlusskonto:
+      Slot_Finish_Abschluss(valueLeft,
+                            valueRight);
+      break;
+  case FT_Account::en_AccountTypes::en_AccountType_Activa:
+  case FT_Account::en_AccountTypes::en_AccountType_Passiva:
+      Slot_Finish_ActivaPassiva(valueLeft,
+                                valueRight);
+      break;
+  default:
+    break;
+  }
+}
+
+void FT_AccountManager::Slot_Finish_AufwandErtrag(double valueLeft, double valueRight)
+{
   st_booking booking;
   double difference = valueLeft - valueRight;
   difference = fabs(difference);
@@ -159,13 +191,148 @@ void FT_AccountManager::Slot_Finish(double valueLeft, double valueRight)
   }
 }
 
+void FT_AccountManager::Slot_Finish_Abschluss(double valueLeft, double valueRight)
+{
+  st_booking booking;
+  double difference = valueLeft - valueRight;
+  difference = fabs(difference);
+  if (valueLeft > valueRight) {
+    /** @note Buchung links nach rechts */
+    /** @todo Verlust geht an VB?! */
+    booking.m_accountNameSource = "Verbindlichkeiten";
+    booking.m_accountNameTarget = reinterpret_cast<FT_Account*>(sender())->Get_Title();
+    booking.m_valueEuro = difference;
+    booking.m_type = en_bookingType::en_bookingType_guv;
+    Slot_SendFromTo(booking);
+  } else if (valueRight > valueLeft) {
+    /** @note Buchung rechts nach links */
+    booking.m_accountNameSource = reinterpret_cast<FT_Account*>(sender())->Get_Title();
+    booking.m_accountNameTarget = "Eigenkapital";
+    booking.m_valueEuro = difference;
+    booking.m_type = en_bookingType::en_bookingType_guv;
+    Slot_SendFromTo(booking);
+  } else {
+    /** keine Buchung */
+  }
+}
+
+void FT_AccountManager::Slot_Finish_ActivaPassiva(double valueLeft, double valueRight)
+{
+  st_booking booking;
+  double difference = valueLeft - valueRight;
+  difference = fabs(difference);
+  if (valueLeft > valueRight) {
+    /** @note Buchung links nach rechts */
+    /** @todo Verlust geht an VB?! */
+    booking.m_accountNameSource = "Schlussbilanzkonto";
+    booking.m_accountNameTarget = reinterpret_cast<FT_Account*>(sender())->Get_Title();
+    booking.m_valueEuro = difference;
+    booking.m_type = en_bookingType::en_bookingType_guv;
+    Slot_SendFromTo(booking);
+    reinterpret_cast<FT_Account*>(sender())->m_carryForwardLeft = difference;
+    reinterpret_cast<FT_Account*>(sender())->m_carryForwardRight = 0.0;
+  } else if (valueRight > valueLeft) {
+    /** @note Buchung rechts nach links */
+    booking.m_accountNameSource = reinterpret_cast<FT_Account*>(sender())->Get_Title();
+    booking.m_accountNameTarget = "Schlussbilanzkonto";
+    booking.m_valueEuro = difference;
+    booking.m_type = en_bookingType::en_bookingType_guv;
+    Slot_SendFromTo(booking);
+    reinterpret_cast<FT_Account*>(sender())->m_carryForwardLeft = 0.0;
+    reinterpret_cast<FT_Account*>(sender())->m_carryForwardRight = difference;
+  } else {
+    /** keine Buchung */
+  }
+}
+
+void FT_AccountManager::Slot_SetEBK(int32_t index, double value)
+{
+  if (m_AccountList.count() > index)
+  {
+    switch(m_AccountList[index]->Get_Type())
+    {
+    case FT_Account::en_AccountTypes::en_AccountType_Activa:
+      m_AccountList[index]->Slot_AddLeft("EBK",
+                                         value);
+      break;
+    case FT_Account::en_AccountTypes::en_AccountType_Passiva:
+      m_AccountList[index]->Slot_AddRight("EBK",
+                                         value);
+      break;
+    default:
+      break;
+    }
+
+  }
+}
+
 void FT_AccountManager::Slot_TriggerFinish()
 {
+  /** @note Abschlusskonten resetten */
+  for (int32_t i = 0; m_AccountList.count() > i; i++) {
+    switch (m_AccountList[i]->Get_Type()) {
+    case FT_Account::en_AccountTypes::en_AccountType_Abschlusskonto:
+      m_AccountList[i]->Slot_Clear();
+      break;
+    default:
+      break;
+    }
+  }
+
+
   for (int32_t i = 0; m_AccountList.count() > i; i++) {
     switch (m_AccountList[i]->Get_Type()) {
     case FT_Account::en_AccountTypes::en_AccountType_Aufwandskonto:
     case FT_Account::en_AccountTypes::en_AccountType_Ertragskonto:
       m_AccountList[i]->Slot_Finish();
+      break;
+    default:
+      break;
+    }
+  }
+
+  /** @note Abschluss GuV */
+  for (int32_t i = 0; m_AccountList.count() > i; i++) {
+    switch (m_AccountList[i]->Get_Type()) {
+    case FT_Account::en_AccountTypes::en_AccountType_Abschlusskonto:
+      m_AccountList[i]->Slot_Finish();
+      break;
+    default:
+      break;
+    }
+  }
+
+  /** @note Abschluss Activa / Passiva */
+  for (int32_t i = 0; m_AccountList.count() > i; i++) {
+    switch (m_AccountList[i]->Get_Type()) {
+    case FT_Account::en_AccountTypes::en_AccountType_Activa:
+    case FT_Account::en_AccountTypes::en_AccountType_Passiva:
+      m_AccountList[i]->Slot_Finish();
+      break;
+    default:
+      break;
+    }
+  }
+
+  /** @note Schlussbilanz uebertragen in globale Bilanz */
+
+  for (int32_t i = 0; m_AccountList.count() > i; i++)
+  {
+    if ("Schlussbilanzkonto" == m_AccountList[i]->Get_Title())
+    {
+      m_bilanzAccount->Slot_CopyFrom(m_AccountList[i]);
+    }
+  }
+
+}
+
+void FT_AccountManager::Slot_CarryForward()
+{
+  for (int32_t i = 0; m_AccountList.count() > i; i++) {
+    switch (m_AccountList[i]->Get_Type()) {
+    case FT_Account::en_AccountTypes::en_AccountType_Activa:
+    case FT_Account::en_AccountTypes::en_AccountType_Passiva:
+      m_AccountList[i]->Slot_CarryForward();
       break;
     default:
       break;

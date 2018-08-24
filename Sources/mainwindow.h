@@ -30,6 +30,8 @@ private slots:
 
     void on_pushButton_finish_clicked();
 
+    void on_pushButton_carryForward_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer* m_StepTimer = NULL;
@@ -53,6 +55,9 @@ private:
       en_Account_Verbindlichkeiten,
       en_Account_Umsatzerloese,
       en_Account_GUV,
+      en_Account_Warenlager,
+      en_Account_SBK,
+      en_Account_Versicherungen,
       sizeof_en_Accounts
     };
 
@@ -95,6 +100,18 @@ private:
       {  // en_Account_GUV
         "GUV",
         FT_Account::en_AccountTypes::en_AccountType_Abschlusskonto
+      },
+      {  // en_Account_Warenlager
+        "Warenlager",
+         FT_Account::en_AccountTypes::en_AccountType_Activa
+      },
+      {  // en_Account_SBK
+        "Schlussbilanzkonto",
+        FT_Account::en_AccountTypes::en_AccountType_Abschlusskonto
+      },
+      {  // en_Account_Versicherungen
+        "Versicherungen",
+        FT_Account::en_AccountTypes::en_AccountType_Aufwandskonto
       },
     };
 };

@@ -68,6 +68,12 @@ MainWindow::MainWindow(QWidget *parent) :
                                    en_Accounts::en_Account_Umsatzerloese,
                                    90.0);
 
+  m_accountManager.Slot_SetEBK(en_Accounts::en_Account_Eigenkapital,
+                               2000.0);
+
+  m_accountManager.Slot_SetEBK(en_Accounts::en_Account_Bank,
+                               2000.0);
+
   m_accountManager.show();
 
   m_accountManager.Slot_Init();
@@ -131,8 +137,32 @@ void MainWindow::Slot_StepTimer() {
 
 
   /** @note Gewinn */
-  m_cashVirtual += ((ui->doubleSpinBox_productPrice->value() - ui->doubleSpinBox_materialCostPerProduct->value()) * ui->spinBox_deliveriesPerMonth->value()) / date.daysInMonth();
+  /** @note Kaufen eines Produktes */
 
+  m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Warenlager,
+                                   en_Accounts::en_Account_Verbindlichkeiten,
+                                   ui->doubleSpinBox_materialCostPerProduct->value());
+
+  /** @note Verkaufen eines Produktes */
+
+  m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Umsatzerloese,
+                                   en_Accounts::en_Account_Warenlager,
+                                   ui->doubleSpinBox_materialCostPerProduct->value());
+#if 1
+  m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Bank,
+                                   en_Accounts::en_Account_Umsatzerloese,
+                                   ui->doubleSpinBox_productPrice->value());
+#endif
+
+  /** @note Versicherungen immer am 1. des Jahres */
+
+  if ((1 == ui->calendarWidget->selectedDate().month())
+      && (1 == ui->calendarWidget->selectedDate().day()))
+  {
+    m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Versicherungen,
+                                     en_Accounts::en_Account_Bank,
+                                     ui->doubleSpinBox_reassurance->value());
+  }
 
   QString cashString = QString::number(m_cashVirtual, 'f', 2);
   ui->lcdNumber_cashVirtual->display(cashString);
@@ -154,4 +184,9 @@ void MainWindow::on_pushButton_reset_clicked()
 void MainWindow::on_pushButton_finish_clicked()
 {
   m_accountManager.Slot_TriggerFinish();
+}
+
+void MainWindow::on_pushButton_carryForward_clicked()
+{
+  m_accountManager.Slot_CarryForward();
 }

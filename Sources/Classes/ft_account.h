@@ -37,6 +37,9 @@ public:
     Column_Right,
     sizeof_en_Columns
   };
+
+  double m_carryForwardLeft = 0.0;
+  double m_carryForwardRight = 0.0;
 signals:
   void Signal_AccountSumChanged(double valueEuro,
                                 en_Columns column);
@@ -57,6 +60,15 @@ public slots:
                               en_Columns column);
   void Slot_UpdateSum(en_Columns column);
   void Slot_Finish(void);
+
+  void Slot_CarryForward(void);
+
+  void Slot_CopyFrom(FT_Account* accountSource);
+
+  void Slot_CopyFromTo(QTableWidget* source,
+                       QTableWidget* target);
+
+  void Slot_Clear(void);
 
 #ifdef UNITTESTS
   virtual
@@ -87,6 +99,9 @@ private:
 
   QTableWidget* m_tables[en_Columns::sizeof_en_Columns];
   QLineEdit* m_lineEdits[en_Columns::sizeof_en_Columns];
+
+
 };
 
 #endif // FT_ACCOUNT_H
+

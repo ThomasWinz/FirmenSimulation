@@ -52,7 +52,24 @@ public slots:
 
   void Slot_Finish(double valueLeft,
                    double valueRight);
+
+  void Slot_Finish_AufwandErtrag(double valueLeft,
+                                 double valueRight);
+
+  void Slot_Finish_Abschluss(double valueLeft,
+                             double valueRight);
+
+
+  void Slot_Finish_ActivaPassiva(double valueLeft,
+                                 double valueRight);
+
+  void Slot_SetEBK(int32_t index,
+                   double value);
+
+
   void Slot_TriggerFinish(void);
+
+  void Slot_CarryForward(void);
 
   void Slot_Init(void);
 
@@ -61,6 +78,7 @@ public:
 #else
 private:
 #endif
+  FT_Account* m_bilanzAccount = NULL;
   Ui::FT_AccountManager* ui;
   QList<FT_Account*> m_AccountList;
   uint32_t m_currentID = 0;

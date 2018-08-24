@@ -164,6 +164,76 @@ void FT_Account::Slot_Finish()
                      sumRight);
 }
 
+void FT_Account::Slot_CarryForward(void)
+{
+  this->Slot_Clear();
+
+  if (0.0 == m_carryForwardLeft)
+  {
+
+  }
+  else
+  {
+    Slot_AddLeft("EBK",
+                 m_carryForwardLeft);
+  }
+
+  if (0.0 == m_carryForwardRight)
+  {
+
+  }
+  else
+  {
+    Slot_AddRight("EBK",
+                  m_carryForwardRight);
+  }
+}
+
+void FT_Account::Slot_CopyFrom(FT_Account *accountSource)
+{
+  this->Slot_Clear();
+
+  Slot_CopyFromTo(accountSource->Get_ui()->tableWidget_left,
+                  this->ui->tableWidget_left);
+
+  Slot_CopyFromTo(accountSource->Get_ui()->tableWidget_right,
+                  this->ui->tableWidget_right);
+
+  this->ui->lineEdit_sumLeft->setText(accountSource->Get_ui()->lineEdit_sumLeft->text());
+  this->ui->lineEdit_sumRight->setText(accountSource->Get_ui()->lineEdit_sumRight->text());
+}
+
+void FT_Account::Slot_CopyFromTo(QTableWidget *source, QTableWidget *target)
+{
+  for (int32_t i = 0; source->rowCount() > i; i++)
+  {
+    QTableWidgetItem* itemLeft = new QTableWidgetItem(source->item(i,
+                                                                   en_Columns::Column_Left)->text());
+    QTableWidgetItem* itemRight = new QTableWidgetItem(source->item(i,
+                                                                    en_Columns::Column_Right)->text());
+
+    target->insertRow(target->rowCount());
+    target->setItem(target->rowCount() - 1,
+                   en_Columns::Column_Left,
+                   itemLeft);
+    target->setItem(target->rowCount() -1,
+                   en_Columns::Column_Right,
+                   itemRight);
+  }
+}
+
+void FT_Account::Slot_Clear(void)
+{
+  this->ui->tableWidget_left->clearContents();
+  this->ui->tableWidget_right->clearContents();
+
+  this->ui->tableWidget_left->setRowCount(0);
+  this->ui->tableWidget_right->setRowCount(0);
+
+  this->ui->lineEdit_sumLeft->setText("0.00");
+  this->ui->lineEdit_sumRight->setText("0.00");
+}
+
 void FT_Account::Slot_AddValue(const QString &title,
                                double valueEuro,
                                en_Columns column) {
