@@ -350,6 +350,7 @@ void FT_AccountManager::Slot_SendFromTo_Add(const FT_AccountManager::st_booking 
 {
   QString textSource = "";
   QString textTarget = "";
+  QString textBooking = "";
   switch(booking.m_type) {
   case en_bookingType::en_bookingType_guv:
     textSource = booking.m_accountNameSource;
@@ -357,10 +358,18 @@ void FT_AccountManager::Slot_SendFromTo_Add(const FT_AccountManager::st_booking 
     break;
   default:
     m_currentID++;
+    textBooking = QString("%1. %2 %3 an %4 %5")
+        .arg(m_currentID)
+          .arg(booking.m_accountNameSource)
+          .arg(QString::number(booking.m_valueEuro))
+          .arg(booking.m_accountNameTarget)
+          .arg(QString::number(booking.m_valueEuro));
+    ui->plainTextEdit_log->appendPlainText(textBooking);
     textSource = QString::number(m_currentID);
     textTarget = QString::number(m_currentID);
     break;
   }
+
 
 
   /** @todo Column depending on accountType! */

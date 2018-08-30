@@ -27,17 +27,20 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         Classes/ft_account.cpp \
-        Classes/ft_accountmanager.cpp
+        Classes/ft_accountmanager.cpp \
+    Classes/ft_customer.cpp
 
 HEADERS += \
         mainwindow.h \
         Classes/ft_account.h \
-        Classes/ft_accountmanager.h
+        Classes/ft_accountmanager.h \
+    Classes/ft_customer.h
 
 FORMS += \
         mainwindow.ui \
         Classes/ft_account.ui \
-    Classes/ft_accountmanager.ui
+    Classes/ft_accountmanager.ui \
+    Classes/ft_customer.ui
 
 RESOURCES += \
     Ressources/ressources.qrc

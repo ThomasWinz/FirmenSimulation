@@ -28,15 +28,21 @@ SOURCES += \
         Sources/main.cpp \
         ../Sources/Classes/ft_account.cpp \
         ../Sources/Classes/ft_accountmanager.cpp \
+        ../Sources/Classes/ft_customer.cpp \
         Sources/Classes/ft_account_test.cpp \
-        Sources/Classes/ft_accountmanager_test.cpp
+        Sources/Classes/ft_accountmanager_test.cpp \
+        Sources/Classes/ft_customer_test.cpp
 
 HEADERS += \
         ../Sources/Classes/ft_account.h \
-        ../Sources/Classes/ft_accountmanager.h
+        ../Sources/Classes/ft_accountmanager.h \
+        ../Sources/Classes/ft_customer.h \
+        Sources/Classes/ft_customer_test.h
 
 FORMS += \
-        ../Sources/Classes/ft_account.ui
+        ../Sources/Classes/ft_account.ui \
+        ../Sources/Classes/ft_accountmanager.ui \
+        ../Sources/Classes/ft_customer.ui
 
 RESOURCES += \
         ../Sources/Ressources/ressources.qrc

@@ -48,7 +48,7 @@ TEST_F(Ft_AccountManager_Test, Slot_RegisterAccount) {
       "asgdsdgasaccountname4711",  // accountName
       "leftTextAnasdgsdgsdnoDazumal9321",  // leftText
       "asdgsdgBlablub",  // rightText
-      FT_Account::en_AccountTypes::en_AccountType_Erfolgskonto
+      FT_Account::en_AccountTypes::en_AccountType_Ertragskonto
     },
     {
       "accountngggsafgsdame4711",  // accountName
@@ -94,7 +94,7 @@ TEST_F(Ft_AccountManager_Test, Slot_SendFromTo) {
   st_Test tests[numOfTests] = {
     "sourceTest1",  // accountNameSource
     "targetTest2",  // accountNameTarget
-    FT_Account::en_AccountTypes::en_AccountType_Erfolgskonto,  // typeSource
+    FT_Account::en_AccountTypes::en_AccountType_Ertragskonto,  // typeSource
     FT_Account::en_AccountTypes::en_AccountType_Activa,  // typeTarget
     10.5
   };
