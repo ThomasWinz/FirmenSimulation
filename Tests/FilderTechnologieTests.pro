@@ -31,13 +31,16 @@ SOURCES += \
         ../Sources/Classes/ft_customer.cpp \
         Sources/Classes/ft_account_test.cpp \
         Sources/Classes/ft_accountmanager_test.cpp \
-        Sources/Classes/ft_customer_test.cpp
+        Sources/Classes/ft_customer_test.cpp \
+    ../Sources/Classes/ft_shop.cpp \
+    Sources/Classes/ft_shop_test.cpp
 
 HEADERS += \
         ../Sources/Classes/ft_account.h \
         ../Sources/Classes/ft_accountmanager.h \
         ../Sources/Classes/ft_customer.h \
-        Sources/Classes/ft_customer_test.h
+        Sources/Classes/ft_customer_test.h \
+    ../Sources/Classes/ft_shop.h
 
 FORMS += \
         ../Sources/Classes/ft_account.ui \

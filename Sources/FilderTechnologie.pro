@@ -28,13 +28,15 @@ SOURCES += \
         mainwindow.cpp \
         Classes/ft_account.cpp \
         Classes/ft_accountmanager.cpp \
-    Classes/ft_customer.cpp
+    Classes/ft_customer.cpp \
+    Classes/ft_shop.cpp
 
 HEADERS += \
         mainwindow.h \
         Classes/ft_account.h \
         Classes/ft_accountmanager.h \
-    Classes/ft_customer.h
+    Classes/ft_customer.h \
+    Classes/ft_shop.h
 
 FORMS += \
         mainwindow.ui \

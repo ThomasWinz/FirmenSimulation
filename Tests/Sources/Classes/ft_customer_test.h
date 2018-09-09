@@ -15,7 +15,7 @@ class Ft_Customer_Test : public QObject, public ::testing::Test
  public:
 
   Ft_Customer_Test();
-  ft_customer m_customer;
+  FT_Customer m_customer;
  public:
   MOCK_METHOD0(Mock_BuyProduct, void());
 

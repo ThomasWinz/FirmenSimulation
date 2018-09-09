@@ -65,7 +65,7 @@ TEST_F(Ft_Customer_Test, Slot_SetDate) {
   tests[1].m_buyDateListGiven.append(QDate(2018, 8, 30));
   tests[1].m_callBuyExpected = 0;
 
-  m_customer.connect(&m_customer, &ft_customer::Signal_BuyProduct,
+  m_customer.connect(&m_customer, &FT_Customer::Signal_BuyProduct,
                      this, &Ft_Customer_Test::Mock_BuyProduct);
 
   for (uint32_t i = 0; numOfTests > i; i++)

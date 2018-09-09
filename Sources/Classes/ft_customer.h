@@ -8,13 +8,14 @@ namespace Ui {
 class ft_customer;
 }
 
-class ft_customer : public QWidget
+class FT_Customer : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit ft_customer(QWidget *parent = 0);
-  ~ft_customer();
+  explicit FT_Customer(int32_t numOfProductsPerMonth,
+                       QWidget *parent = 0);
+  ~FT_Customer();
 
 public slots:
   void Slot_SetDate(QDate currentDate);

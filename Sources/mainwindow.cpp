@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   ui->setupUi(this);
   m_StepTimer = new QTimer();
-  m_StepTimer->setInterval(1000);
+  m_StepTimer->setInterval(100);
   connect(m_StepTimer, &QTimer::timeout,
           this, &MainWindow::Slot_StepTimer);
 
@@ -46,6 +46,8 @@ MainWindow::MainWindow(QWidget *parent) :
                                 "Activa",
                                 "Passiva");
 
+  m_accountManager.Slot_SetDate(QDate::currentDate());
+
   for (uint32_t i = 0; en_Accounts::sizeof_en_Accounts > i; i++)
   {
     m_accountManager.Slot_RegisterAccount(m_Accounts[i].m_name,
@@ -77,6 +79,32 @@ MainWindow::MainWindow(QWidget *parent) :
   m_accountManager.show();
 
   m_accountManager.Slot_Init();
+
+
+  m_shop = new FT_Shop(en_Accounts::en_Account_Umsatzerloese,
+                       en_Accounts::en_Account_Warenlager,
+                       en_Accounts::en_Account_Bank,
+                       en_Accounts::en_Account_Verbindlichkeiten,
+                       this);
+
+  connect(m_shop, SIGNAL(Signal_SendFromTo(int32_t, int32_t, uint32_t)),
+          &m_accountManager, SLOT(Slot_SendFromTo(int32_t, int32_t, uint32_t)));
+
+  connect(ui->doubleSpinBox_materialCostPerProduct, SIGNAL(valueChanged(double)),
+          m_shop, SLOT(Slot_SetMaterialCosts(double)));
+  m_shop->Slot_SetMaterialCosts(ui->doubleSpinBox_materialCostPerProduct->value());
+
+  connect(ui->doubleSpinBox_productPrice, SIGNAL(valueChanged(double)),
+          m_shop, SLOT(Slot_SetProductPrice(double)));
+  m_shop->Slot_SetProductPrice(ui->doubleSpinBox_productPrice->value());
+
+  m_CustomerList.append(new FT_Customer(3));
+
+  for (int32_t i = 0; m_CustomerList.size() > i; i++)
+  {
+    connect(m_CustomerList[i], &FT_Customer::Signal_BuyProduct,
+            m_shop, &FT_Shop::Slot_SellProduct);
+  }
 }
 
 
@@ -110,6 +138,9 @@ void MainWindow::Slot_StepTimer() {
 
   qDebug() << "Date" << date;
   date = date.addDays(1);
+
+  m_accountManager.Slot_SetDate(date);
+
   ui->calendarWidget->setSelectedDate(date);
   m_numOfDays++;
   ui->lcdNumber_numberOfDays->display(QString::number(m_numOfDays));
@@ -139,6 +170,11 @@ void MainWindow::Slot_StepTimer() {
   /** @note Gewinn */
   /** @note Kaufen eines Produktes */
 
+  for (int32_t i = 0; m_CustomerList.size() > i; i++)
+  {
+    m_CustomerList[i]->Slot_SetDate(date);
+  }
+#if 0
   m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Warenlager,
                                    en_Accounts::en_Account_Verbindlichkeiten,
                                    ui->doubleSpinBox_materialCostPerProduct->value());
@@ -148,7 +184,7 @@ void MainWindow::Slot_StepTimer() {
   m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Umsatzerloese,
                                    en_Accounts::en_Account_Warenlager,
                                    ui->doubleSpinBox_materialCostPerProduct->value());
-#if 1
+
   m_accountManager.Slot_SendFromTo(en_Accounts::en_Account_Bank,
                                    en_Accounts::en_Account_Umsatzerloese,
                                    ui->doubleSpinBox_productPrice->value());

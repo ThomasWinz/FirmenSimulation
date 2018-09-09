@@ -7,6 +7,8 @@
 
 #include "Classes/ft_account.h"
 #include "Classes/ft_accountmanager.h"
+#include "Classes/ft_shop.h"
+#include "Classes/ft_customer.h"
 
 namespace Ui {
 class MainWindow;
@@ -44,6 +46,8 @@ private:
 
     FT_Account* m_accountBilanz = NULL;
     FT_AccountManager m_accountManager;
+    FT_Shop* m_shop = NULL;
+    QList<FT_Customer*> m_CustomerList;
 
     enum en_Accounts
     {

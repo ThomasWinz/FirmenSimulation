@@ -3,19 +3,20 @@
 #include "ft_customer.h"
 #include "ui_ft_customer.h"
 
-ft_customer::ft_customer(QWidget *parent) :
+FT_Customer::FT_Customer(int32_t numOfProductsPerMonth, QWidget *parent) :
   QWidget(parent),
   ui(new Ui::ft_customer)
 {
   ui->setupUi(this);
+  m_numOfProductsPerMonth = numOfProductsPerMonth;
 }
 
-ft_customer::~ft_customer()
+FT_Customer::~FT_Customer()
 {
   delete ui;
 }
 
-void ft_customer::Slot_SetDate(QDate currentDate)
+void FT_Customer::Slot_SetDate(QDate currentDate)
 {
   if (1 == currentDate.day())
   {
@@ -28,7 +29,7 @@ void ft_customer::Slot_SetDate(QDate currentDate)
   }
 }
 
-void ft_customer::Calc_ProductBuyDays(QDate currentDate)
+void FT_Customer::Calc_ProductBuyDays(QDate currentDate)
 {
   m_ProductBuyDays.clear();
   while (m_ProductBuyDays.count() < m_numOfProductsPerMonth)

@@ -5,6 +5,7 @@
 #include <QList>
 #include <QtWidgets/QVBoxLayout>
 #include <QComboBox>
+#include <QDate>
 
 #include "ft_account.h"
 
@@ -49,6 +50,11 @@ public slots:
   void Slot_SendFromTo(int32_t indexSource,
                        int32_t indexTarget,
                        double valueEuro);
+  void Slot_SendFromTo(int32_t indexSource,
+                       int32_t indexTarget,
+                       uint32_t valueCents);
+
+  void Slot_SetDate(QDate currentDate);
 
   void Slot_Finish(double valueLeft,
                    double valueRight);
@@ -86,6 +92,7 @@ private:
   QVBoxLayout* m_layoutLeft = NULL;
   QVBoxLayout* m_layoutRight = NULL;
   int32_t m_indexesShown[2] = { -1, -1 };
+  QDate m_currentDate;
 private slots:
   void Slot_SendFromTo_Add(const st_booking &booking,
                            int32_t indexSource,

@@ -144,6 +144,18 @@ void FT_AccountManager::Slot_SendFromTo(int32_t indexSource,
   return;
 }
 
+void FT_AccountManager::Slot_SendFromTo(int32_t indexSource, int32_t indexTarget, uint32_t valueCents)
+{
+  Slot_SendFromTo(indexSource,
+                  indexTarget,
+                  static_cast<double>(valueCents) / 100.0);
+}
+
+void FT_AccountManager::Slot_SetDate(QDate currentDate)
+{
+  m_currentDate = currentDate;
+}
+
 void FT_AccountManager::Slot_Finish(double valueLeft, double valueRight)
 {
   switch (reinterpret_cast<FT_Account*>(sender())->Get_Type())
@@ -346,7 +358,9 @@ void FT_AccountManager::Slot_Init()
   on_comboBox_accountRight_activated(1);
 }
 
-void FT_AccountManager::Slot_SendFromTo_Add(const FT_AccountManager::st_booking &booking, int32_t indexSource, int32_t indexTarget)
+void FT_AccountManager::Slot_SendFromTo_Add(const FT_AccountManager::st_booking &booking,
+                                            int32_t indexSource,
+                                            int32_t indexTarget)
 {
   QString textSource = "";
   QString textTarget = "";
@@ -358,8 +372,9 @@ void FT_AccountManager::Slot_SendFromTo_Add(const FT_AccountManager::st_booking 
     break;
   default:
     m_currentID++;
-    textBooking = QString("%1. %2 %3 an %4 %5")
-        .arg(m_currentID)
+    textBooking = QString("%1. %2: %3 %4 an %5 %6")
+          .arg(m_currentID, 10, 10, QChar('0'))
+          .arg(m_currentDate.toString("dd.MM.yyyy"))
           .arg(booking.m_accountNameSource)
           .arg(QString::number(booking.m_valueEuro))
           .arg(booking.m_accountNameTarget)
