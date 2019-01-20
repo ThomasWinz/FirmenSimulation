@@ -28,6 +28,18 @@ void FT_AccountManager::resizeEvent(QResizeEvent *event)
   }
 }
 
+FT_Account *FT_AccountManager::GetAccountByIndex(int32_t index)
+{
+  if (m_AccountList.count() > index)
+  {
+    return m_AccountList[index];
+  }
+  else
+  {
+    return nullptr;
+  }
+}
+
 void FT_AccountManager::Slot_RegisterAccount(const QString &accountName,
                                              const QString &leftText,
                                              const QString &rightText,

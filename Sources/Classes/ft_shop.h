@@ -17,6 +17,7 @@ signals:
   void Signal_SendFromTo(int32_t indexSource,
                          int32_t indexTarget,
                          uint32_t valueCents);
+  void Signal_ProductSold(uint64_t valueCents);
 
 public slots:
   void Slot_SellProduct(void);

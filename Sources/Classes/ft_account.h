@@ -31,6 +31,7 @@ public:
   Ui::FT_Account* Get_ui(void);
   QString Get_Title(void);
   en_AccountTypes Get_Type(void) { return m_MyType; }
+  uint64_t Get_ValueCents(void);
 
   enum en_Columns {
     Column_Left = 0,

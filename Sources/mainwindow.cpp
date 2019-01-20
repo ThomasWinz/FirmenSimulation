@@ -4,6 +4,7 @@
 #include <QDebug>
 
 #include "Classes/ft_account.h"
+#include "Classes/ft_liquidity_export.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -11,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   ui->setupUi(this);
   m_StepTimer = new QTimer();
-  m_StepTimer->setInterval(100);
+  m_StepTimer->setInterval(1);
   connect(m_StepTimer, &QTimer::timeout,
           this, &MainWindow::Slot_StepTimer);
 
@@ -36,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->spinBox_deliveriesPerMonth->setValue(m_Settings->value("spinBox_deliveriesPerMonth", 0).toInt());
   ui->spinBox_newCustomersPerMonth->setValue(m_Settings->value("spinBox_newCustomersPerMonth", 0).toInt());
   ui->spinBox_abonnents->setValue(m_Settings->value("spinBox_abonnents", 0).toInt());
+  ui->spinBox_timerDelay->setValue(m_Settings->value("spinBox_timerDelay", 100).toInt());
 
   on_pushButton_reset_clicked();
 
@@ -98,13 +100,16 @@ MainWindow::MainWindow(QWidget *parent) :
           m_shop, SLOT(Slot_SetProductPrice(double)));
   m_shop->Slot_SetProductPrice(ui->doubleSpinBox_productPrice->value());
 
-  m_CustomerList.append(new FT_Customer(3));
+  m_CustomerList.append(new FT_Customer(1));
 
   for (int32_t i = 0; m_CustomerList.size() > i; i++)
   {
     connect(m_CustomerList[i], &FT_Customer::Signal_BuyProduct,
             m_shop, &FT_Shop::Slot_SellProduct);
   }
+
+  connect(m_shop, &FT_Shop::Signal_ProductSold,
+          &m_liquidity, &ft_liquidity::Slot_ProductSold);
 }
 
 
@@ -125,8 +130,15 @@ MainWindow::~MainWindow()
   m_Settings->setValue("spinBox_deliveriesPerMonth", ui->spinBox_deliveriesPerMonth->value());
   m_Settings->setValue("spinBox_newCustomersPerMonth", ui->spinBox_newCustomersPerMonth->value());
   m_Settings->setValue("spinBox_abonnents", ui->spinBox_abonnents->value());
+  m_Settings->setValue("spinBox_timerDelay", ui->spinBox_timerDelay->value());
 
   delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+  m_accountManager.close();
+  m_accountBilanz->close();
 }
 
 void MainWindow::on_pushButton_start_clicked() {
@@ -151,17 +163,26 @@ void MainWindow::Slot_StepTimer() {
 
   /** @note Verwalte Anzahl Bestandskunden */
   if (date.month() != m_month) {
+    m_liquidity.EnterBankMonth(date, m_accountManager.GetAccountByIndex(en_Accounts::en_Account_Bank)->Get_ValueCents());
+
+
     m_month = date.month();
-    ui->spinBox_numOfCustomers->setValue(ui->spinBox_numOfCustomers->value() + ui->spinBox_newCustomersPerMonth->value());
 
+    ui->lcdNumber_numOfCustomers->display(ui->lcdNumber_numOfCustomers->value() + ui->spinBox_newCustomersPerMonth->value());
 
+    for (int32_t i = 0; i < ui->spinBox_newCustomersPerMonth->value(); i++) {
+      FT_Customer* newCustomer = new FT_Customer(1);
+      m_CustomerList.append(newCustomer);
+      connect(newCustomer, &FT_Customer::Signal_BuyProduct,
+              m_shop, &FT_Shop::Slot_SellProduct);
+    }
   }
 
   /** @note Akquise */
   ui->lcdNumber_neededTimeNewCustomers->display(static_cast<double>(ui->doubleSpinBox_acquisitionTime->value() * ui->spinBox_newCustomersPerMonth->value() / m_weeksPerMonth));
 
   /** @note Betreuung Bestandskunden */
-  ui->lcdNumber_neededTimeCustomers->display(static_cast<double>(ui->doubleSpinBox_supportTimePerCustomerPerMonth->value() * ui->spinBox_numOfCustomers->value() / m_weeksPerMonth));
+  ui->lcdNumber_neededTimeCustomers->display(static_cast<double>(ui->doubleSpinBox_supportTimePerCustomerPerMonth->value() * ui->lcdNumber_numOfCustomers->value() / m_weeksPerMonth));
 
   /** @note Packen */
   ui->lcdNumber_neededTimeForPacking->display(static_cast<double>(ui->doubleSpinBox_deliveryTime->value() * ui->spinBox_deliveriesPerMonth->value() / m_weeksPerMonth));
@@ -215,6 +236,12 @@ void MainWindow::on_pushButton_reset_clicked()
   ui->lcdNumber_cashVirtual->display(m_cashVirtual);
 
   ui->lcdNumber_cash->display(ui->doubleSpinBox_startupCash->value());
+
+  ui->calendarWidget->setSelectedDate(QDate::currentDate());
+
+  m_numOfDays = 0;
+
+  ui->lcdNumber_numberOfDays->display(QString::number(m_numOfDays));
 }
 
 void MainWindow::on_pushButton_finish_clicked()
@@ -225,4 +252,14 @@ void MainWindow::on_pushButton_finish_clicked()
 void MainWindow::on_pushButton_carryForward_clicked()
 {
   m_accountManager.Slot_CarryForward();
+}
+
+void MainWindow::on_pushButton_exportLiquidity_clicked()
+{
+  ft_liquidity_export::exportIt(&this->m_liquidity);
+}
+
+void MainWindow::on_spinBox_timerDelay_valueChanged(int arg1)
+{
+  this->m_StepTimer->setInterval(arg1);
 }

@@ -34,6 +34,8 @@ public:
 
   virtual void resizeEvent(QResizeEvent* event);
 
+  FT_Account* GetAccountByIndex(int32_t index);
+
 signals:
   void Signal_ActivePassivaChanged(double valueEuro,
                                 FT_Account::en_Columns column);

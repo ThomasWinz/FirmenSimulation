@@ -9,6 +9,7 @@
 #include "Classes/ft_accountmanager.h"
 #include "Classes/ft_shop.h"
 #include "Classes/ft_customer.h"
+#include "Classes/ft_liquidity.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    virtual void closeEvent(QCloseEvent *event);
+
 private slots:
     void on_pushButton_start_clicked();
     void Slot_StepTimer(void);
@@ -33,6 +36,10 @@ private slots:
     void on_pushButton_finish_clicked();
 
     void on_pushButton_carryForward_clicked();
+
+    void on_pushButton_exportLiquidity_clicked();
+
+    void on_spinBox_timerDelay_valueChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -48,6 +55,8 @@ private:
     FT_AccountManager m_accountManager;
     FT_Shop* m_shop = NULL;
     QList<FT_Customer*> m_CustomerList;
+
+    ft_liquidity m_liquidity;
 
     enum en_Accounts
     {

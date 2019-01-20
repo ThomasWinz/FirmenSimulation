@@ -43,6 +43,11 @@ QString FT_Account::Get_Title()
   return ui->label_titleTop->text();
 }
 
+uint64_t FT_Account::Get_ValueCents()
+{
+  return ui->lineEdit_sumLeft->text().toDouble() * 100;
+}
+
 void FT_Account::Slot_SetTitles(const QString &titleTop,
                                 const QString &titleLeft,
                                 const QString &titleRight) {

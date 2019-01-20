@@ -30,6 +30,8 @@ void FT_Shop::Slot_SellProduct()
   emit Signal_SendFromTo(m_accountIndex_Bank,
                          m_accountIndex_Umsatzerloese,
                          m_productPrice_Cents);
+
+  emit Signal_ProductSold(m_productPrice_Cents);
 }
 
 void FT_Shop::Slot_SetMaterialCosts(uint32_t valueCents)
