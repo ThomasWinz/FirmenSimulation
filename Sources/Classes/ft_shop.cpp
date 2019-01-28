@@ -32,6 +32,8 @@ void FT_Shop::Slot_SellProduct()
                          m_productPrice_Cents);
 
   emit Signal_ProductSold(m_productPrice_Cents);
+
+  emit Signal_Wareneinkauf(m_materialCostPerProduct_Cents);
 }
 
 void FT_Shop::Slot_SetMaterialCosts(uint32_t valueCents)

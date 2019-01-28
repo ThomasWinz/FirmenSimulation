@@ -15,6 +15,11 @@ const QString m_lineTitles[ft_liquidity_export::sizeof_en_lineIndexes] = {
   QString("Bezahlte Rechnungen"),  // en_lineIndex_bezahlteRechnungen
   QString("Vorsteuererstattung"),  // en_lineIndex_Vorsteuererstattung
   QString("Sonstige Einzahlungen"),  // en_lineIndex_sonstigeEinzahlungen
+  QString(""),
+  QString("Auszahlungen (brutto), Summe"),  // en_lineIndex_Auszahlungen
+  QString("Investitionen"),  // en_lineIndex_Investitionen,
+  QString("Wareneinkauf"),  // en_lineIndex_Wareneinkauf,
+  QString("Versicherungen / Beiträge / sonst. Steuern"),  // en_lineIndex_Versicherungen
 };
 
 ft_liquidity_export::ft_liquidity_export()
@@ -25,6 +30,8 @@ ft_liquidity_export::ft_liquidity_export()
 void ft_liquidity_export::exportIt(ft_liquidity* liquidity)
 {
   QXlsx::Document xlsx;
+
+  xlsx.addSheet("Liquiditätsplanung");
 
   /** @notes Write titles */
   int32_t maxValue = (sizeof_en_lineIndexes - 1);
@@ -44,6 +51,8 @@ void ft_liquidity_export::exportIt(ft_liquidity* liquidity)
         year = liquidity->GetEntryList()->at(i).m_date.year();
         xlsx.write(en_lineIndex_Year, en_columnIndex_ValuesStart + i, QString("%1. Jahr").arg(year - firstYear));
       }
+
+      ft_liquidity::Entry entry = liquidity->GetEntryList()->at(i);
       int32_t monthIndex = liquidity->GetEntryList()->at(i).m_date.month();
       QString monthName = locale->monthName(monthIndex);
       xlsx.write(en_lineIndex_Month, en_columnIndex_ValuesStart + i, monthName);
@@ -52,6 +61,12 @@ void ft_liquidity_export::exportIt(ft_liquidity* liquidity)
 
       xlsx.write(en_lineIndex_bezahlteRechnungen, en_columnIndex_ValuesStart + i,
                  QString::number(static_cast<double>(liquidity->GetEntryList()->at(i).m_bezahlteRechnungenCent) / 100, 'f', 2));
+
+      xlsx.write(en_lineIndex_Auszahlungen, en_columnIndex_ValuesStart + i,
+                 QString::number(static_cast<double>(entry.Get_SummeAusgaben()) / 100, 'f', 2));
+
+      xlsx.write(en_lineIndex_Wareneinkauf, en_columnIndex_ValuesStart + i,
+                 QString::number(static_cast<double>(liquidity->GetEntryList()->at(i).m_WareneinkaufCent) / 100, 'f', 2));
     }
   }
 

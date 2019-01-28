@@ -21,6 +21,11 @@ public:
     en_lineIndex_bezahlteRechnungen,
     en_lineIndex_Vorsteuererstattung,
     en_lineIndex_sonstigeEinzahlungen,
+    en_lineIndex_dummy2,
+    en_lineIndex_Auszahlungen,
+    en_lineIndex_Investitionen,
+    en_lineIndex_Wareneinkauf,
+    en_lineIndex_Versicherungen,
     sizeof_en_lineIndexes
   };
 

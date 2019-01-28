@@ -17,11 +17,21 @@ public:
     QDate m_date;
     uint64_t m_moneyCent = 0;
     uint64_t m_bezahlteRechnungenCent = 0;
+    uint64_t m_InvestitionenCent = 0;
+    uint64_t m_WareneinkaufCent = 0;
+    uint64_t m_Versicherungen = 0;
+
+    uint64_t Get_SummeAusgaben(void) {
+      return m_InvestitionenCent + m_WareneinkaufCent + m_Versicherungen;
+    }
   };
   QList<Entry>* GetEntryList(void);
 
 public slots:
   void Slot_ProductSold(uint64_t valueCents);
+  void Slot_Investitionen(uint64_t valueCents);
+  void Slot_Wareneinkauf(uint64_t valueCents);
+  void Slot_Versicherungen(uint64_t valueCents);
 private:
   QList<Entry> m_EntryList;
 };

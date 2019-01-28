@@ -25,3 +25,18 @@ void ft_liquidity::Slot_ProductSold(uint64_t valueCents)
     m_EntryList.last().m_bezahlteRechnungenCent += valueCents;
   }
 }
+
+void ft_liquidity::Slot_Investitionen(uint64_t valueCents)
+{
+  m_EntryList.last().m_InvestitionenCent += valueCents;
+}
+
+void ft_liquidity::Slot_Wareneinkauf(uint64_t valueCents)
+{
+  m_EntryList.last().m_WareneinkaufCent += valueCents;
+}
+
+void ft_liquidity::Slot_Versicherungen(uint64_t valueCents)
+{
+  m_EntryList.last().m_Versicherungen += valueCents;
+}
