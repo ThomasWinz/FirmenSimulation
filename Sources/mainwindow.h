@@ -41,6 +41,8 @@ private slots:
 
     void on_spinBox_timerDelay_valueChanged(int arg1);
 
+    void on_pushButton_loadfromfile_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer* m_StepTimer = NULL;

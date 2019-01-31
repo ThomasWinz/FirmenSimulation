@@ -5,6 +5,7 @@
 
 #include "Classes/ft_account.h"
 #include "Classes/ft_liquidity_export.h"
+#include "Classes/ft_event_engine.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -110,6 +111,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
   connect(m_shop, &FT_Shop::Signal_ProductSold,
           &m_liquidity, &ft_liquidity::Slot_ProductSold);
+
+  connect(m_shop, &FT_Shop::Signal_Wareneinkauf,
+          &m_liquidity, &ft_liquidity::Slot_Wareneinkauf);
 }
 
 
@@ -262,4 +266,11 @@ void MainWindow::on_pushButton_exportLiquidity_clicked()
 void MainWindow::on_spinBox_timerDelay_valueChanged(int arg1)
 {
   this->m_StepTimer->setInterval(arg1);
+}
+
+void MainWindow::on_pushButton_loadfromfile_clicked()
+{
+  ft_event_engine eventEngine;
+
+  eventEngine.Slot_OpenFile("../Sources/SimFiles/Scenario_1.csv");
 }

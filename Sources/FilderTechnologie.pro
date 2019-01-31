@@ -32,7 +32,8 @@ SOURCES += \
     Classes/ft_customer.cpp \
     Classes/ft_shop.cpp \
     Classes/ft_liquidity.cpp \
-    Classes/ft_liquidity_export.cpp
+    Classes/ft_liquidity_export.cpp \
+    Classes/ft_event_engine.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +42,9 @@ HEADERS += \
     Classes/ft_customer.h \
     Classes/ft_shop.h \
     Classes/ft_liquidity.h \
-    Classes/ft_liquidity_export.h
+    Classes/ft_liquidity_export.h \
+    Classes/ft_event_engine.h \
+    Classes/ft_events.h
 
 FORMS += \
         mainwindow.ui \
