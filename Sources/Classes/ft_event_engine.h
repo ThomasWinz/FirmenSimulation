@@ -14,9 +14,11 @@ public:
   explicit ft_event_engine(QObject *parent = nullptr);
 
 signals:
+  void Signal_Event(en_Events, uint64_t value_cents);
 
 public slots:
   void Slot_OpenFile(QString filepath);
+  void Slot_GetEvents(QDate date);
 
 private:
   char m_delimiter = ';';

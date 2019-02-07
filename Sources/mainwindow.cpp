@@ -5,7 +5,7 @@
 
 #include "Classes/ft_account.h"
 #include "Classes/ft_liquidity_export.h"
-#include "Classes/ft_event_engine.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -182,6 +182,8 @@ void MainWindow::Slot_StepTimer() {
     }
   }
 
+  eventEngine.Slot_GetEvents(date);
+
   /** @note Akquise */
   ui->lcdNumber_neededTimeNewCustomers->display(static_cast<double>(ui->doubleSpinBox_acquisitionTime->value() * ui->spinBox_newCustomersPerMonth->value() / m_weeksPerMonth));
 
@@ -270,7 +272,5 @@ void MainWindow::on_spinBox_timerDelay_valueChanged(int arg1)
 
 void MainWindow::on_pushButton_loadfromfile_clicked()
 {
-  ft_event_engine eventEngine;
-
   eventEngine.Slot_OpenFile("../Sources/SimFiles/Scenario_1.csv");
 }

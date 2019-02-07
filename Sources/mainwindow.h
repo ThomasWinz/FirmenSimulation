@@ -10,6 +10,7 @@
 #include "Classes/ft_shop.h"
 #include "Classes/ft_customer.h"
 #include "Classes/ft_liquidity.h"
+#include "Classes/ft_event_engine.h"
 
 namespace Ui {
 class MainWindow;
@@ -57,6 +58,7 @@ private:
     FT_AccountManager m_accountManager;
     FT_Shop* m_shop = NULL;
     QList<FT_Customer*> m_CustomerList;
+    ft_event_engine eventEngine;
 
     ft_liquidity m_liquidity;
 

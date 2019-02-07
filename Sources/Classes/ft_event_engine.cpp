@@ -76,3 +76,16 @@ void ft_event_engine::Slot_OpenFile(QString filepath)
     file->deleteLater();
   }
 }
+
+void ft_event_engine::Slot_GetEvents(QDate date)
+{
+  for (int32_t i = 0; m_valueList.count() > i; i++) {
+    st_values value = m_valueList.at(i);
+
+    if (value.m_date == date) {
+      emit Signal_Event(value.m_event, value.m_value_cents);
+      qDebug() << "Event" << i << value.m_event << m_EventNames[value.m_event] << value.m_value_cents;
+      m_valueList.removeAt(i--);
+    }
+  }
+}
